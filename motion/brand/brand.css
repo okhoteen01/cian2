@@ -1,0 +1,17 @@
+/* Cian prototype brand profile, sourced from public/reference/tokens/tokens.css. */
+@font-face{font-family:'Cian Prototype';src:url(fonts/Lato-Regular.woff2) format('woff2');font-weight:400;font-style:normal;font-display:block}
+@font-face{font-family:'Cian Prototype';src:url(fonts/Lato-Semibold.woff2) format('woff2');font-weight:500;font-style:normal;font-display:block}
+@font-face{font-family:'Cian Prototype';src:url(fonts/Lato-Semibold.woff2) format('woff2');font-weight:600;font-style:normal;font-display:block}
+@font-face{font-family:'Cian Prototype';src:url(fonts/Lato-Bold.woff2) format('woff2');font-weight:700;font-style:normal;font-display:block}
+
+:root{
+  --font:'Cian Prototype',Arial,sans-serif;
+  --w-regular:400; --w-medium:600; --w-bold:700;
+  --accent:#006cfd; --accent-ink:#ffffff;
+  --ink:#0d162e; --ink2:#697797; --ink3:#a0acca;
+  --line:#d0d8e9; --line2:#c0c9dd; --soft:#f3f5fa;
+  --dark:#0d162e; --surface:#ffffff; --bg:#f3f5fa;
+  --dim:13,22,46; --sub-bg:rgba(13,22,46,.86); --cursor:#0d162e;
+  --r-app:16px;
+  --ring-stops:#006cfd,#3484fd,#8aabfe,#006cfd;
+}

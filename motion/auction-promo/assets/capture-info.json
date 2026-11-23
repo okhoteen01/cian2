@@ -1,0 +1,134 @@
+{
+  "source": "src/pages/AuctionPage.tsx",
+  "viewport": [
+    440,
+    920
+  ],
+  "states": {
+    "seller-form": {
+      "price": {
+        "x": 28,
+        "y": 396.6875,
+        "width": 384,
+        "height": 22
+      },
+      "step": {
+        "x": 28,
+        "y": 508.6875,
+        "width": 384,
+        "height": 22
+      },
+      "review": {
+        "x": 16,
+        "y": 581.6875,
+        "width": 408,
+        "height": 44
+      }
+    },
+    "seller-review": {
+      "edit": {
+        "x": 16,
+        "y": 501.6875,
+        "width": 176.875,
+        "height": 44
+      },
+      "publish": {
+        "x": 202.875,
+        "y": 501.6875,
+        "width": 221.125,
+        "height": 44
+      }
+    },
+    "seller-published": {
+      "buyer": {
+        "x": 16,
+        "y": 72,
+        "width": 202,
+        "height": 44
+      }
+    },
+    "buyer-active": {
+      "bid": {
+        "x": 44,
+        "y": 622.390625,
+        "width": 352,
+        "height": 22
+      },
+      "submit": {
+        "x": 32,
+        "y": 689.390625,
+        "width": 376,
+        "height": 44
+      },
+      "next": {
+        "x": 372,
+        "y": 224,
+        "width": 32,
+        "height": 32
+      },
+      "favorite": {
+        "x": 368,
+        "y": 340,
+        "width": 44,
+        "height": 44
+      }
+    },
+    "buyer-photo": {
+      "next": {
+        "x": 372,
+        "y": 224,
+        "width": 32,
+        "height": 32
+      }
+    },
+    "buyer-loading": {},
+    "buyer-success": {
+      "notification": {
+        "x": 36,
+        "y": 662.390625,
+        "width": 376,
+        "height": 32
+      },
+      "another": {
+        "x": 32,
+        "y": 703.390625,
+        "width": 376,
+        "height": 44
+      }
+    },
+    "buyer-notification-off": {},
+    "buyer-low-input": {
+      "submit": {
+        "x": 32,
+        "y": 689.390625,
+        "width": 376,
+        "height": 44
+      }
+    },
+    "buyer-low": {
+      "bid": {
+        "x": 44,
+        "y": 622.390625,
+        "width": 352,
+        "height": 22
+      }
+    },
+    "buyer-error": {
+      "retry": {
+        "x": 32,
+        "y": 683.390625,
+        "width": 376,
+        "height": 44
+      }
+    },
+    "buyer-retry": {},
+    "buyer-finished": {
+      "more": {
+        "x": 16,
+        "y": 483.1875,
+        "width": 408,
+        "height": 44
+      }
+    }
+  }
+}
