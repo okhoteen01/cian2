@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { auctionGoals, trackAuctionGoal } from '@/lib/auctionMetrics';
 import { Badge, Button, Checkbox, Icon, Input } from '@/ui';
 import s from './AuctionPage.module.css';
 
@@ -21,10 +22,14 @@ function ApartmentCover({ variant = 0, label = 'Фотография светл�
   );
 }
 
-function PhotoSlider() {
+function PhotoSlider({ onPhotoChange }: { onPhotoChange: (photo: number) => void }) {
   const photos = ['Светлая гостиная', 'Кухня с окном', 'Спальня'];
   const [photo, setPhoto] = useState(0);
-  const showPhoto = (next: number) => setPhoto((next + photos.length) % photos.length);
+  const showPhoto = (next: number) => {
+    const selected = (next + photos.length) % photos.length;
+    setPhoto(selected);
+    onPhotoChange(selected);
+  };
   return (
     <div className={s.photoSlider} aria-label="Фотографии квартиры">
       <ApartmentCover variant={photo} label={`Фото ${photo + 1}: ${photos[photo]}`} />
@@ -36,7 +41,7 @@ function PhotoSlider() {
       </button>
       <div className={s.sliderDots} aria-label="Выбор фотографии">
         {photos.map((name, index) => (
-          <button key={name} type="button" aria-label={`Показать: ${name}`} aria-current={photo === index ? 'true' : undefined} onClick={() => setPhoto(index)} />
+          <button key={name} type="button" aria-label={`Показать: ${name}`} aria-current={photo === index ? 'true' : undefined} onClick={() => showPhoto(index)} />
         ))}
       </div>
     </div>
@@ -54,19 +59,35 @@ export function AuctionPage() {
 
   useEffect(() => {
     if (bidState !== 'loading') return;
-    const timer = window.setTimeout(() => setBidState('success'), 900);
+    const timer = window.setTimeout(() => {
+      trackAuctionGoal(auctionGoals.bidAccepted, { role: 'buyer', step: 'bid_result', state: 'success' });
+      setBidState('success');
+    }, 900);
     return () => window.clearTimeout(timer);
   }, [bidState]);
 
+  useEffect(() => {
+    const isSeller = role === 'seller';
+    trackAuctionGoal(auctionGoals.screenView, {
+      role,
+      step: isSeller ? sellerStep : bidState,
+      screen: isSeller ? `seller_${sellerStep}` : `buyer_${bidState}`,
+    });
+  }, [role, sellerStep, bidState]);
+
   const makeBid = () => {
+    trackAuctionGoal(auctionGoals.bidSubmitted, { role: 'buyer', step: 'bid_form' });
     if (parsePrice(bid) < minBid) {
+      trackAuctionGoal(auctionGoals.bidTooLow, { role: 'buyer', step: 'bid_validation', state: 'low' });
       setBidState('low');
       return;
     }
+    trackAuctionGoal(auctionGoals.bidPending, { role: 'buyer', step: 'bid_request', state: 'loading' });
     setBidState('loading');
   };
 
   const switchRole = (nextRole: Role) => {
+    trackAuctionGoal(auctionGoals.roleSwitched, { role: nextRole, step: 'role_switcher' });
     setRole(nextRole);
     if (nextRole === 'buyer') setBidState('active');
   };
@@ -82,7 +103,10 @@ export function AuctionPage() {
             <p className={s.kicker}>ПРОТОТИП</p>
             <strong>Продажа на аукционе</strong>
           </div>
-          <Button theme="stroke_secondary" size="XS" aria-label="Уведомления" onClick={() => setNotified(!notified)}>
+          <Button theme="stroke_secondary" size="XS" aria-label="Уведомления" onClick={() => {
+            trackAuctionGoal(auctionGoals.notificationToggled, { role, step: 'header' });
+            setNotified(!notified);
+          }}>
             <Icon name="Bell" size={18} />
           </Button>
         </header>
@@ -115,9 +139,15 @@ export function AuctionPage() {
             increment={increment}
             onStartPrice={setStartPrice}
             onIncrement={setIncrement}
-            onReview={() => setSellerStep('review')}
+            onReview={() => {
+              trackAuctionGoal(auctionGoals.sellerReviewOpened, { role: 'seller', step: 'conditions_form' });
+              setSellerStep('review');
+            }}
             onEdit={() => setSellerStep('form')}
-            onPublish={() => setSellerStep('published')}
+            onPublish={() => {
+              trackAuctionGoal(auctionGoals.sellerPublished, { role: 'seller', step: 'review' });
+              setSellerStep('published');
+            }}
           />
         ) : (
           <BuyerFlow
@@ -127,7 +157,13 @@ export function AuctionPage() {
             onBid={setBid}
             onNotified={setNotified}
             onMakeBid={makeBid}
-            onState={setBidState}
+            onPhotoChange={(photo) => trackAuctionGoal(auctionGoals.photoChanged, { role: 'buyer', step: 'gallery', photo })}
+            onFavorite={() => trackAuctionGoal(auctionGoals.favoriteToggled, { role: 'buyer', step: 'listing_card' })}
+            onState={(state) => {
+              if (state === 'error') trackAuctionGoal(auctionGoals.bidError, { role: 'buyer', step: 'bid_request', state });
+              if (state === 'finished') trackAuctionGoal(auctionGoals.auctionFinished, { role: 'buyer', step: 'auction_status', state });
+              setBidState(state);
+            }}
           />
         )}
       </div>
@@ -205,6 +241,8 @@ function BuyerFlow({
   onBid,
   onNotified,
   onMakeBid,
+  onPhotoChange,
+  onFavorite,
   onState,
 }: {
   bid: string;
@@ -213,6 +251,8 @@ function BuyerFlow({
   onBid: (value: string) => void;
   onNotified: (value: boolean) => void;
   onMakeBid: () => void;
+  onPhotoChange: (photo: number) => void;
+  onFavorite: () => void;
   onState: (value: BidState) => void;
 }) {
   const reset = () => onState('active');
@@ -222,12 +262,12 @@ function BuyerFlow({
   return (
     <section className={`${s.content} ${s.buyerContent}`}>
       <article className={s.propertyCard}>
-        <PhotoSlider />
-        <div className={s.titleRow}><div><Badge tone="main">Аукцион</Badge><h1>2-комн. квартира, 54 м²</h1><p className={s.address}>Москва, ул. Усиевича, 23</p></div><button className={s.heart} aria-label="Добавить в избранное" type="button"><Icon name="Heart" size={26} /></button></div>
+        <PhotoSlider onPhotoChange={onPhotoChange} />
+        <div className={s.titleRow}><div><Badge tone="main">Аукцион</Badge><h1>2-комн. квартира, 54 м²</h1><p className={s.address}>Москва, ул. Усиевича, 23</p></div><button className={s.heart} aria-label="Добавить в избранное" type="button" onClick={onFavorite}><Icon name="Heart" size={26} /></button></div>
       </article>
       <div className={s.auctionInfo}><div className={s.metricCard}><span>Текущая ставка</span><strong>{formatPrice(currentBid)}</strong></div><div className={s.metricCard}><span>До конца</span><strong>01:42:18</strong></div></div>
       {bidState === 'success' ? (
-        <div className={s.stateCard} aria-live="polite"><Badge tone="positive">Ставка принята</Badge><h2>Вы лидируете</h2><p>Ваша ставка {formatPrice(parsePrice(bid))} сейчас самая высокая.</p><Checkbox label="Уведомить, если ставку перебьют" checked={notified} onChange={(event) => onNotified(event.target.checked)} /><Button theme="stroke_primary" fullWidth onClick={reset}>Сделать другую ставку</Button></div>
+        <div className={s.stateCard} aria-live="polite"><Badge tone="positive">Ставка принята</Badge><h2>Вы лидируете</h2><p>Ваша ставка {formatPrice(parsePrice(bid))} сейчас самая высокая.</p><Checkbox label="Уведомить, если ставку перебьют" checked={notified} onChange={(event) => { trackAuctionGoal(auctionGoals.notificationToggled, { role: 'buyer', step: 'bid_success' }); onNotified(event.target.checked); }} /><Button theme="stroke_primary" fullWidth onClick={reset}>Сделать другую ставку</Button></div>
       ) : bidState === 'loading' ? (
         <div className={s.stateCard} aria-live="polite"><div className={s.loader} /><h2>Проверяем ставку</h2><p>Это займёт несколько секунд.</p></div>
       ) : bidState === 'error' ? (
