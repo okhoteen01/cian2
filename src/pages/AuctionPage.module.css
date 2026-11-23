@@ -1,0 +1,63 @@
+.page { min-height: 100vh; padding: 24px; background: var(--background-secondary); }
+.phone { width: min(100%, 440px); min-height: calc(100vh - 48px); margin: 0 auto; background: var(--background-primary); box-shadow: 0 16px 48px rgb(30 43 64 / 14%); }
+.header { min-height: 64px; padding: 10px 16px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--stroke-border-default); }
+.header > :last-child { margin-left: auto; }
+.brand { width: 34px; height: 34px; display: grid; place-items: center; color: var(--text-inverted-default); background: var(--control-main-primary-default); border-radius: 9px; font-weight: 700; font-size: 22px; }
+.kicker { color: var(--text-secondary-default); font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+.roleSwitch { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 8px 16px; background: var(--background-secondary); }
+.roleSwitch button { border: 0; background: transparent; color: var(--text-secondary-default); padding: 10px; border-radius: 8px; font: inherit; font-weight: 600; }
+.roleSwitch .activeRole { background: var(--background-primary); color: var(--text-primary-default); box-shadow: 0 1px 3px rgb(21 31 47 / 12%); }
+.content { display: grid; gap: 16px; padding: 20px 16px 28px; }
+.buyerContent { gap: 12px; padding-top: 16px; }
+.buyerContent .cover { height: 176px; }
+.propertyCard { display: grid; gap: 12px; padding: 12px; border-radius: 16px; background: var(--background-secondary); }
+.content h1 { font-size: 26px; line-height: 1.2; }
+.content h2 { font-size: 20px; }
+.lead, .address { color: var(--text-secondary-default); }
+.cover { height: 196px; position: relative; overflow: hidden; border-radius: 14px; background: linear-gradient(145deg, #ece6db 0 48%, #b6c4c0 48%); }
+.cover::before { content: ''; position: absolute; inset: 24px 54% 38px 10%; border: 7px solid #f9faf8; background: linear-gradient(90deg, #c2d9dc 48%, #edf4ea 48%); }
+.window { position: absolute; top: 24px; left: 42%; width: 46%; height: 72px; background: linear-gradient(155deg, #afd8e0, #eff7e3); border: 7px solid #fbfcfa; }
+.sofa { position: absolute; left: 13%; bottom: 24px; width: 60%; height: 48px; border-radius: 30px 30px 7px 7px; background: #d7b69e; box-shadow: inset 0 12px #e4c4ab; }
+.plant { position: absolute; right: 11%; bottom: 21px; width: 20px; height: 54px; border-radius: 50% 50% 12px 12px; background: #4f7b57; transform: rotate(-12deg); box-shadow: -15px 5px #668d61, 13px 8px #3d6d4e; }
+.photo1 { background: linear-gradient(145deg, #d8e0e4 0 48%, #d4c8ba 48%); }
+.photo1 .window { background: linear-gradient(155deg, #cbddea, #f4e6ce); left: 10%; width: 54%; }
+.photo1 .sofa { left: 37%; width: 48%; background: #9ba7a4; box-shadow: inset 0 12px #b9c2be; }
+.photo1 .plant { right: 82%; transform: rotate(10deg) scale(.8); }
+.photo2 { background: linear-gradient(145deg, #e1d9d1 0 48%, #bdc4c9 48%); }
+.photo2 .window { left: 48%; width: 38%; background: linear-gradient(155deg, #cbd8df, #edf1df); }
+.photo2 .sofa { left: 15%; width: 44%; background: #9ba3ae; box-shadow: inset 0 12px #bcc2c8; }
+.photo2 .plant { right: 12%; transform: rotate(12deg) scale(.72); }
+.photoSlider { position: relative; }
+.sliderButton { position: absolute; top: 50%; width: 32px; height: 32px; display: grid; place-items: center; border: 0; border-radius: 50%; background: rgb(255 255 255 / 92%); color: var(--text-primary-default); transform: translateY(-50%); box-shadow: 0 2px 8px rgb(25 37 58 / 16%); }
+.sliderPrev { left: 8px; }
+.sliderNext { right: 8px; }
+.sliderDots { position: absolute; bottom: 8px; left: 50%; display: flex; gap: 5px; transform: translateX(-50%); }
+.sliderDots button { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgb(255 255 255 / 62%); }
+.sliderDots button[aria-current='true'] { width: 18px; border-radius: 8px; background: var(--background-primary); }
+.titleRow { display: flex; justify-content: space-between; gap: 12px; }
+.titleRow h1 { margin-top: 6px; font-size: 22px; }
+.heart { width: 44px; height: 44px; display: grid; place-items: center; flex: none; border: 1px solid var(--stroke-border-default); border-radius: 12px; background: var(--background-primary); color: var(--text-main-default); }
+.auctionInfo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.metricCard { padding: 12px; border-radius: 12px; background: var(--background-secondary); }
+.auctionInfo span, .summary span { display: block; color: var(--text-secondary-default); font-size: 14px; }
+.auctionInfo strong { display: block; margin-top: 2px; font-size: 18px; }
+.bidPanel, .stateCard, .summary { display: grid; gap: 12px; padding: 16px; border-radius: 12px; background: var(--background-secondary); }
+.buyerContent .bidPanel { gap: 10px; padding: 14px 16px; }
+.stateCard { background: var(--surface-positive-default); }
+.stateCard p { color: var(--text-secondary-default); }
+.summary { grid-template-columns: 1fr auto; align-items: baseline; }
+.summary strong { text-align: right; }
+.fields { display: grid; gap: 16px; }
+.apartmentMini { display: flex; gap: 12px; align-items: center; padding: 10px; border: 1px solid var(--stroke-border-default); border-radius: 12px; }
+.apartmentMini .cover { flex: 0 0 76px; height: 56px; border-radius: 8px; }
+.apartmentMini span { display: block; color: var(--text-secondary-default); font-size: 14px; margin-top: 4px; }
+.actions { display: grid; grid-template-columns: 1fr 1.25fr; gap: 10px; }
+.publicationStatus { display: flex; align-items: center; gap: 10px; }
+.successMark { width: 44px; height: 44px; display: grid; place-items: center; flex: none; border-radius: 50%; color: var(--text-positive-default); background: var(--surface-positive-default); }
+.demoStates { color: var(--text-secondary-default); font-size: 13px; }
+.demoStates summary { cursor: pointer; }
+.demoStates > div { display: flex; gap: 8px; flex-wrap: wrap; padding-top: 8px; }
+.demoStates button { padding: 0; border: 0; color: var(--text-main-default); background: transparent; font: inherit; text-decoration: underline; }
+.loader { width: 32px; height: 32px; border: 3px solid var(--surface-main-default); border-top-color: var(--control-main-primary-default); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 520px) { .page { padding: 0; } .phone { width: 100%; min-height: 100vh; box-shadow: none; } }
